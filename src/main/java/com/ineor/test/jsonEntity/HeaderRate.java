@@ -2,6 +2,10 @@ package com.ineor.test.jsonEntity;
 
 import java.util.List;
 
+/**
+ * JSON Header mapper
+ * @author Janko Livic
+ */
 public class HeaderRate {
     private String name;
     private String code;

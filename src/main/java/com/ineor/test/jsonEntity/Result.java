@@ -3,6 +3,10 @@ package com.ineor.test.jsonEntity;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Helper class for printing out
+ * @author Janko Livic
+ */
 public class Result {
     private String countryName;
     private Double standard;

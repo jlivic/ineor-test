@@ -28,35 +28,18 @@ public class BusinessLogic {
     public static void doJob(Header header) {
         for (int i = 0; i < header.getRates().size(); i++) {
 
-            String countryName;
-            Double standard;
-            LocalDate effectiveFrom;
-
             //for rows that have only one period, put them in list in order to not to iterate them
             if (header.getRates().get(i).getPeriods().size() == 1) {
-
-                countryName = header.getRates().get(i).getName();
-                standard = header.getRates().get(i).getPeriods().get(0).getRate().getStandard();
-                effectiveFrom = header.getRates().get(i).getPeriods().get(0).getEffective_from();
-
-                data.add(new Result(countryName, standard, effectiveFrom));
+                data.add(new Result( header.getRates().get(i).getName(), header.getRates().get(i).getPeriods().get(0).getRate().getStandard(), header.getRates().get(i).getPeriods().get(0).getEffective_from()));
 
             } else {
 
                 // loop trough data that have more then 1 period
                 for (int j = 0; j < header.getRates().get(i).getPeriods().size(); j++) {
-                    countryName = header.getRates().get(i).getName();
-                    standard = header.getRates().get(i).getPeriods().get(j).getRate().getStandard();
 
-                    // for every iteration save first period which is the latest in json
-                    effectiveFrom = header.getRates().get(i).getPeriods().get(0).getEffective_from();
-
-                    //check if one country have more rates, if does take the latest one and save him into the map
-                    if (!effectiveFrom.isAfter(header.getRates().get(i).getPeriods().get(j).getEffective_from())) {
-
-                        effectiveFrom = header.getRates().get(i).getPeriods().get(j).getEffective_from();
-                        standard = header.getRates().get(i).getPeriods().get(j).getPeriodRateStandard();
-                        data.add(new Result(countryName, standard, effectiveFrom));
+                    //take the first effectiveFrom from periods and compare it to others. If latest one exist put it into list
+                    if (!header.getRates().get(i).getPeriods().get(0).getEffective_from().isAfter(header.getRates().get(i).getPeriods().get(j).getEffective_from())) {
+                        data.add(new Result(header.getRates().get(i).getName(), header.getRates().get(i).getPeriods().get(j).getRate().getStandard(), header.getRates().get(i).getPeriods().get(j).getEffective_from()));
                     }
                 }
             }
@@ -66,15 +49,13 @@ public class BusinessLogic {
         System.out.println();// empty row for visibility
 
         System.out.println("Countries with highest VAT in Europe based on valid last date are: ");
-        Comparator<Result> comparatorHighest = Comparator.comparing(Result::getStandard).thenComparing(Result::getDate).reversed();
-        data.sort(comparatorHighest);
+        data.sort(Comparator.comparing(Result::getStandard).thenComparing(Result::getDate).reversed());
         data.stream().limit(3).forEach(s -> System.out.println(s.getCountryName() + " VAT: " + s.getStandard() + "%. Last valid date: " + s.getDate()));
 
         System.out.println();// empty row for visibility
 
         System.out.println("Countries with lowest VAT in Europe based on valid last date are: ");
-        Comparator<Result> comparatorLowest = Comparator.comparing(Result::getStandard).reversed().thenComparing(Result::getDate).reversed();
-        data.sort(comparatorLowest);
+        data.sort(Comparator.comparing(Result::getStandard).reversed().thenComparing(Result::getDate).reversed());
         data.stream().limit(3).forEach(s -> System.out.println(s.getCountryName() + " VAT: " + s.getStandard() + "%. Last valid date: " + s.getDate()));
 
     }

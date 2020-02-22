@@ -9,6 +9,10 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import java.time.LocalDate;
 
+/**
+ * Period mapper
+ * @author Janko Livic
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class HeaderRatePeriod {
 
