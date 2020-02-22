@@ -2,6 +2,7 @@ package com.ineor.test.logic;
 
 import com.ineor.test.jsonEntity.Header;
 import com.ineor.test.jsonEntity.Result;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -31,6 +32,7 @@ public class BusinessLogic {
             Double standard;
             LocalDate effectiveFrom;
 
+            //for rows that have only one period, put them in list in order to not to iterate them
             if (header.getRates().get(i).getPeriods().size() == 1) {
 
                 countryName = header.getRates().get(i).getName();
@@ -46,17 +48,15 @@ public class BusinessLogic {
                     countryName = header.getRates().get(i).getName();
                     standard = header.getRates().get(i).getPeriods().get(j).getRate().getStandard();
 
-                    // for every iteration save first period wich is the latest in json
+                    // for every iteration save first period which is the latest in json
                     effectiveFrom = header.getRates().get(i).getPeriods().get(0).getEffective_from();
 
-                    //check if one country have more rates, if does take the oldest and save him into the map
-                    if (countryName.toLowerCase().equals(header.getRates().get(i).getName().toLowerCase())) {
-                        if (!effectiveFrom.isAfter(header.getRates().get(i).getPeriods().get(j).getEffective_from())) {
+                    //check if one country have more rates, if does take the latest one and save him into the map
+                    if (!effectiveFrom.isAfter(header.getRates().get(i).getPeriods().get(j).getEffective_from())) {
 
-                            effectiveFrom = header.getRates().get(i).getPeriods().get(j).getEffective_from();
-                            standard = header.getRates().get(i).getPeriods().get(j).getPeriodRateStandard();
-                            data.add(new Result(countryName, standard, effectiveFrom));
-                        }
+                        effectiveFrom = header.getRates().get(i).getPeriods().get(j).getEffective_from();
+                        standard = header.getRates().get(i).getPeriods().get(j).getPeriodRateStandard();
+                        data.add(new Result(countryName, standard, effectiveFrom));
                     }
                 }
             }

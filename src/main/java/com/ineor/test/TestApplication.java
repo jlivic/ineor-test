@@ -13,6 +13,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * Ineor test, parsing json and creating logic as said in email
+ * @author Janko Livic
+ */
 @SpringBootApplication
 public class TestApplication {
 
@@ -32,7 +36,7 @@ public class TestApplication {
     @Bean
     public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
         return args -> {
-
+            // do logic for json file
             BusinessLogic.doJob(restTemplate.getForObject("http://jsonvat.com/", Header.class));
 
         };
