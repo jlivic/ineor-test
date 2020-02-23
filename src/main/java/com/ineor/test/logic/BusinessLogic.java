@@ -30,7 +30,7 @@ public class BusinessLogic {
 
             //for rows that have only one period, put them in list in order to not to iterate them
             if (header.getRates().get(i).getPeriods().size() == 1) {
-                data.add(new Result( header.getRates().get(i).getName(), header.getRates().get(i).getPeriods().get(0).getRate().getStandard(), header.getRates().get(i).getPeriods().get(0).getEffective_from()));
+                data.add(new Result(header.getRates().get(i).getName(), header.getRates().get(i).getPeriods().get(0).getRate().getStandard(), header.getRates().get(i).getPeriods().get(0).getEffective_from()));
 
             } else {
 
@@ -49,14 +49,12 @@ public class BusinessLogic {
         System.out.println();// empty row for visibility
 
         System.out.println("Countries with highest VAT in Europe based on valid last date are: ");
-        data.sort(Comparator.comparing(Result::getStandard).thenComparing(Result::getDate).reversed());
-        data.stream().limit(3).forEach(s -> System.out.println(s.getCountryName() + " VAT: " + s.getStandard() + "%. Last valid date: " + s.getDate()));
+        data.stream().sorted(Comparator.comparing(Result::getStandard).thenComparing(Result::getDate).reversed()).limit(3).forEach(s -> System.out.println(s.getCountryName() + " VAT: " + s.getStandard() + "%. Last valid date: " + s.getDate()));
 
         System.out.println();// empty row for visibility
 
         System.out.println("Countries with lowest VAT in Europe based on valid last date are: ");
-        data.sort(Comparator.comparing(Result::getStandard).reversed().thenComparing(Result::getDate).reversed());
-        data.stream().limit(3).forEach(s -> System.out.println(s.getCountryName() + " VAT: " + s.getStandard() + "%. Last valid date: " + s.getDate()));
+        data.stream().sorted(Comparator.comparing(Result::getStandard).reversed().thenComparing(Result::getDate).reversed()).limit(3).forEach(s -> System.out.println(s.getCountryName() + " VAT: " + s.getStandard() + "%. Last valid date: " + s.getDate()));
 
     }
 }
